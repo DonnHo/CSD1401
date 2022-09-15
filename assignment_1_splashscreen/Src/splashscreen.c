@@ -1,3 +1,4 @@
+#include "cprocessing.h"
 
 void splash_screen_init(void)
 {
