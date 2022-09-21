@@ -18,6 +18,17 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Src\carlevel.c" />
+    <ClCompile Include="..\Src\main.c" />
+    <ClCompile Include="..\Src\mainmenu.c" />
+    <ClCompile Include="..\Src\utils.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Inc\carlevel.h" />
+    <ClInclude Include="..\Inc\mainmenu.h" />
+    <ClInclude Include="..\Inc\utils.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -152,8 +163,6 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
 xcopy "$(SolutionDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemGroup>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

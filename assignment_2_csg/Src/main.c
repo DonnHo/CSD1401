@@ -1,7 +1,7 @@
 //---------------------------------------------------------
 // file:	main.c
-// author:	[NAME]
-// email:	[DIGIPEN EMAIL ADDRESS]
+// author:	Brandon Ho Jun Jie
+// email:	brandonjunjie.ho@digipen.edu
 //
 // brief:	Main entry point for the sample project
 //			of the CProcessing library
