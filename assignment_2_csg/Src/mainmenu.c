@@ -75,8 +75,6 @@ void Main_Menu_Update()
 	{
 		if (mousey < startbutton.y1 && mousey > startbutton.y2)
 		{
-			CP_Settings_Fill(green);
-			CP_Graphics_DrawRect(windowX, windowY - 100, buttonW, buttonH);
 			if (CP_Input_MouseClicked())
 			{
 
@@ -90,8 +88,6 @@ void Main_Menu_Update()
 	{
 		if (mousey < exitbutton.y1 && mousey > exitbutton.y2)
 		{
-			CP_Settings_Fill(dred);
-			CP_Graphics_DrawRect(windowX, windowY + 100, buttonW, buttonH);
 			if (CP_Input_MouseClicked())
 			{
 
