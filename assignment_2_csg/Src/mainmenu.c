@@ -4,24 +4,6 @@
 #include <stdlib.h>
 #include "utils.h"
 
-typedef struct
-{
-	int x1;
-	int y1;
-	int x2;
-	int y2;
-}button;
-
-static button button_set(int x1, int y1, int x2, int y2)
-	{
-	button ret;
-	ret.x1 = x1;
-	ret.y1 = y1;
-	ret.x2 = x2;
-	ret.y2 = y2;
-	return ret;
-	}
-
 void Main_Menu_Init()
 {
 	CP_System_SetWindowSize(1000, 1000);
@@ -34,10 +16,6 @@ void Main_Menu_Update()
 
 	double windowX = CP_System_GetWindowWidth() / 2;
 	double windowY = CP_System_GetWindowHeight() / 2;
-
-	button startbutton = button_set(windowX - buttonW / 2, windowY - 50, windowX + buttonW / 2, windowY - 50 - buttonH);
-
-	button exitbutton = button_set(windowX - buttonW / 2, windowY + 50 + buttonH, windowX + buttonW / 2, windowY + 50);
 
 	CP_Graphics_ClearBackground(CP_Color_Create(128, 128, 128, 255));
 	
@@ -80,7 +58,6 @@ void Main_Menu_Update()
 	}
 
 	//Exit button collision
-	//Start button collision
 	if (CP_Input_MouseClicked() && IsAreaClicked(windowX, windowY + 100, buttonW, buttonH, mousex, mousey))
 	{
 		CP_Engine_Terminate();

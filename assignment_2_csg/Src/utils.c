@@ -14,7 +14,12 @@ int IsAreaClicked(float area_center_x, float area_center_y, float area_width, fl
 
 int IsCircleClicked(float circle_center_x, float circle_center_y, float diameter, float click_x, float click_y)
 {
-	// TODO
+	float distance = CP_Math_Distance(circle_center_x, circle_center_y, click_x, click_y);
+
+	if (distance < diameter / 2)
+	{
+		return 1;
+	}
 	return 0;
 }
 
