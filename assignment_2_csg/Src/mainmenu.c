@@ -2,6 +2,25 @@
 #include "carlevel.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "utils.h"
+
+typedef struct
+{
+	int x1;
+	int y1;
+	int x2;
+	int y2;
+}button;
+
+static button button_set(int x1, int y1, int x2, int y2)
+	{
+	button ret;
+	ret.x1 = x1;
+	ret.y1 = y1;
+	ret.x2 = x2;
+	ret.y2 = y2;
+	return ret;
+	}
 
 void Main_Menu_Init()
 {
@@ -16,25 +35,9 @@ void Main_Menu_Update()
 	double windowX = CP_System_GetWindowWidth() / 2;
 	double windowY = CP_System_GetWindowHeight() / 2;
 
-	typedef struct buttoncollision
-	{
-		int x1;
-		int x2;
-		int y1;
-		int y2;
-	}button;
+	button startbutton = button_set(windowX - buttonW / 2, windowY - 50, windowX + buttonW / 2, windowY - 50 - buttonH);
 
-	button startbutton, exitbutton;
-
-	startbutton.x1 = windowX - buttonW/2;
-	startbutton.y1 = windowY - 50;
-	startbutton.x2 = windowX + buttonW/2;
-	startbutton.y2 = windowY - 50 - buttonH;
-
-	exitbutton.x1 = windowX - buttonW / 2;
-	exitbutton.y1 = windowY + 50 + buttonH;
-	exitbutton.x2 = windowX + buttonW / 2;
-	exitbutton.y2 = windowY + 50;
+	button exitbutton = button_set(windowX - buttonW / 2, windowY + 50 + buttonH, windowX + buttonW / 2, windowY + 50);
 
 	CP_Graphics_ClearBackground(CP_Color_Create(128, 128, 128, 255));
 	
@@ -69,31 +72,18 @@ void Main_Menu_Update()
 	{
 		CP_Engine_Terminate();
 	}
-	
+	 
 	//Start button collision
-	if (mousex > startbutton.x1 && mousex < startbutton.x2)
+	if (CP_Input_MouseClicked() && IsAreaClicked(windowX, windowY - 100, buttonW, buttonH, mousex, mousey))
 	{
-		if (mousey < startbutton.y1 && mousey > startbutton.y2)
-		{
-			if (CP_Input_MouseClicked())
-			{
-
-				CP_Engine_SetNextGameState(Car_Level_Init, Car_Level_Update, Car_Level_Exit);
-			}
-		}
+		CP_Engine_SetNextGameState(Car_Level_Init, Car_Level_Update, Car_Level_Exit);
 	}
 
 	//Exit button collision
-	if (mousex > exitbutton.x1 && mousex < exitbutton.x2)
+	//Start button collision
+	if (CP_Input_MouseClicked() && IsAreaClicked(windowX, windowY + 100, buttonW, buttonH, mousex, mousey))
 	{
-		if (mousey < exitbutton.y1 && mousey > exitbutton.y2)
-		{
-			if (CP_Input_MouseClicked())
-			{
-
-				CP_Engine_Terminate();
-			}
-		}
+		CP_Engine_Terminate();
 	}
 
 	//Centre of window
