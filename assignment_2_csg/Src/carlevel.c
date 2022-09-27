@@ -5,12 +5,14 @@
 #include <math.h>
 #include "utils.h"
 
+int carselect = 0;
 typedef struct
 {
 	float posx;
 	float posy;
 	float dia;
 
+	int state;
 }car;
 
 static car car_set(float x, float y, float dia)
@@ -31,19 +33,11 @@ void Car_Level_Update()
 	CP_Graphics_ClearBackground(CP_Color_Create(128, 128, 128, 255));
 	float mousex = CP_Input_GetMouseX();
 	float mousey = CP_Input_GetMouseY();
-	
-	// Mouse pos
-	CP_Settings_TextSize(20.0f);
-	char buffer1[50] = { 0 };
-	sprintf_s(buffer1, _countof(buffer1), "Mouse x: %.2f", mousex);
-	CP_Font_DrawText(buffer1,100, 100);
-	char buffer2[50] = { 0 };
-	sprintf_s(buffer2, _countof(buffer2), "Mouse y: %.2f", mousey);
-	CP_Font_DrawText(buffer2, 100, 120);
 
 	//Car 1
 	car car1 = car_set(300.f, 300.f, 60.f);
 	CP_Graphics_DrawCircle(car1.posx, car1.posy, car1.dia);
+	CP_Graphics_DrawTriangleAdvanced(car1.posx, car1.posy, car1.posx + 50.f, car1.posy, car1.posx + 25.f, car1.posy + 50.f, 0.f);
 	
 	//Car 2
 	CP_Graphics_DrawTriangle(800, 300, 850, 300, 825, 350);
@@ -53,13 +47,25 @@ void Car_Level_Update()
 
 	if (CP_Input_MouseClicked() && IsCircleClicked(car1.posx, car1.posy, car1.dia, mousex, mousey))
 	{
-		CP_Graphics_DrawTriangle(300, 300, 350, 300, 325, 350);
+		carselect = 1;
 	}
 	
 	if (CP_Input_KeyDown(KEY_E))
 	{
 		CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
 	}
+
+	float car1rad = CP_Math_Radians(0.f);
+	AngleToVector(car1rad);
+
+	// Mouse pos
+	CP_Settings_TextSize(20.0f);
+	char buffer1[50] = { 0 };
+	sprintf_s(buffer1, _countof(buffer1), "Mouse x: %.2f", mousex);
+	CP_Font_DrawText(buffer1, 100, 100);
+	char buffer2[50] = { 0 };
+	sprintf_s(buffer2, _countof(buffer2), "Mouse y: %.2f", mousey);
+	CP_Font_DrawText(buffer2, 100, 120);
 }
 
 void Car_Level_Exit()
