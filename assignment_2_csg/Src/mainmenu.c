@@ -59,12 +59,6 @@ void Main_Menu_Update()
 	{
 		CP_Engine_Terminate();
 	}
-
-	//Centre of window
-	CP_Settings_Stroke(CP_Color_Create(70, 93, 130, 255));
-	CP_Settings_StrokeWeight(1.0f);
-	CP_Graphics_DrawLine(0, windowY, (float)CP_System_GetDisplayWidth(), windowY);
-	CP_Graphics_DrawLine(windowX, 0, windowX, (float)CP_System_GetDisplayHeight());
 }
 
 void Main_Menu_Exit()
