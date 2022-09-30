@@ -65,15 +65,6 @@ void Main_Menu_Update()
 	CP_Settings_StrokeWeight(1.0f);
 	CP_Graphics_DrawLine(0, windowY, (float)CP_System_GetDisplayWidth(), windowY);
 	CP_Graphics_DrawLine(windowX, 0, windowX, (float)CP_System_GetDisplayHeight());
-
-	//mouse x,y
-	CP_Settings_TextSize(20.0f);
-	char buffer1[50] = { 0 };
-	sprintf_s(buffer1, _countof(buffer1), "Mouse x: %i", mousex);
-	CP_Font_DrawText(buffer1, 100, 100);
-	char buffer2[50] = { 0 };
-	sprintf_s(buffer2, _countof(buffer2), "Mouse y: %i", mousey);
-	CP_Font_DrawText(buffer2, 100, 120);
 }
 
 void Main_Menu_Exit()

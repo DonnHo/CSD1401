@@ -1,5 +1,6 @@
 #include "cprocessing.h"
 #include <math.h>
+
 int IsAreaClicked(float area_center_x, float area_center_y, float area_width, float area_height, float click_x, float click_y)
 {
 	double x1 = area_center_x - area_width / 2, y1 = area_center_y + area_height / 2;

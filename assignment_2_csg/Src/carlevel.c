@@ -6,6 +6,7 @@
 #include "utils.h"
 
 int carselect = 0;
+
 typedef struct
 {
 	CP_Vector position;
@@ -18,12 +19,15 @@ typedef struct
 	
 }car;
 
-static car car_set(float x, float y, float dia)
+static car car_set(float x, float y, float dia, float angle, float speed, float rspeed)
 {
 	car ret;
 	ret.position.x = x;
 	ret.position.y = y;
 	ret.dia = dia;
+	ret.angle = angle;
+	ret.speed = speed;
+	ret.rspeed = rspeed;
 	return ret;
 }
 car car1, car2, car3;
@@ -31,18 +35,9 @@ void Car_Level_Init()
 {
 	CP_System_SetWindowSize(1000, 1000);
 
-	car1 = car_set(300.f, 300.f, 60.f);
-	car1.angle = 0.f;
-	car1.speed = 0.f;
-	car1.rspeed = 0.f;
-	car2 = car_set(300.f, 600.f, 60.f);
-	car2.angle = 0.f;
-	car2.speed = 0.f;
-	car2.rspeed = 0.f;
-	car3 = car_set(600.f, 300.f, 60.f);
-	car3.angle = 0.f;
-	car3.speed = 0.f;
-	car3.rspeed = 0.f;
+	car1 = car_set(300.f, 300.f, 60.f, 0.f ,0.f, 0.f);
+	car2 = car_set(300.f, 600.f, 60.f, 0.f, 0.f, 0.f);
+	car3 = car_set(600.f, 300.f, 60.f, 0.f, 0.f, 0.f);
 }
 
 void Car_Level_Update()
@@ -51,6 +46,8 @@ void Car_Level_Update()
 	float mousex = CP_Input_GetMouseX();
 	float mousey = CP_Input_GetMouseY();
 	float deltatime = CP_System_GetDt();
+
+	//converting car angle from x axis to vector of car
 	car1.rad = CP_Math_Radians(car1.angle);
 	car1.direction = AngleToVector(car1.rad);
 	car2.rad = CP_Math_Radians(car2.angle);
@@ -58,6 +55,7 @@ void Car_Level_Update()
 	car3.rad = CP_Math_Radians(car3.angle);
 	car3.direction = AngleToVector(car3.rad);
 
+	// collision box of car for selection
 	if (CP_Input_MouseClicked() && IsCircleClicked(car1.position.x, car1.position.y, car1.dia, mousex, mousey))
 	{
 		carselect = 1;
@@ -71,10 +69,13 @@ void Car_Level_Update()
 		carselect = 3;
 	}
 
-	if (CP_Input_KeyDown(KEY_E))
+	// Return to main menu
+	if (CP_Input_KeyDown(KEY_P))
 	{
 		CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
 	}
+
+	// Moving car forward
 	if (CP_Input_KeyDown(KEY_W))
 	{
 		switch (carselect)
@@ -104,6 +105,8 @@ void Car_Level_Update()
 			break;
 		}
 	}
+	
+	// slowing car down after releasing key
 	else
 	{
 		car1.speed -= 6.f * deltatime;
@@ -122,6 +125,8 @@ void Car_Level_Update()
 			car3.speed = 0.f;
 		}
 	}
+
+	// moving car backwards
 	if (CP_Input_KeyDown(KEY_S))
 	{
 		switch (carselect)
@@ -151,6 +156,8 @@ void Car_Level_Update()
 			break;
 		}
 	}
+
+	// slowing down car after releasing key
 	else
 	{
 		car1.rspeed -= 3.f * deltatime;
@@ -169,6 +176,8 @@ void Car_Level_Update()
 			car3.rspeed = 0.f;
 		}
 	}
+
+	// rotate car right
 	if (CP_Input_KeyDown(KEY_D))
 	{
 		switch (carselect)
@@ -184,6 +193,8 @@ void Car_Level_Update()
 			break;
 		}
 	}
+
+	// rotate car left
 	if (CP_Input_KeyDown(KEY_A))
 	{
 		switch (carselect)
@@ -199,6 +210,8 @@ void Car_Level_Update()
 			break;
 		}
 	}
+
+	// moving position of car by multiplying its vector with speed
 	car1.position.x += car1.direction.x * car1.speed;
 	car1.position.y += car1.direction.y * car1.speed;
 	car1.position.x -= car1.direction.x * car1.rspeed;
@@ -268,31 +281,21 @@ void Car_Level_Update()
 		car3.position.y = 970;
 	}
 	//Car 1
-	CP_Settings_Fill(CP_Color_Create(255, 255, 0, 255));
+	CP_Settings_Fill(CP_Color_Create(220, 220, 0, 255));
 	CP_Graphics_DrawCircle(car1.position.x, car1.position.y, car1.dia);
 	
 	//Car 2
-	CP_Settings_Fill(CP_Color_Create(255, 0, 255, 255));
+	CP_Settings_Fill(CP_Color_Create(220, 0, 220, 255));
 	CP_Graphics_DrawCircle(car2.position.x, car2.position.y, car2.dia);
 	
 	//Car 3
-	CP_Settings_Fill(CP_Color_Create(0, 255, 255, 255));
+	CP_Settings_Fill(CP_Color_Create(0, 220, 220, 255));
 	CP_Graphics_DrawCircle(car3.position.x, car3.position.y, car3.dia);
 
 	CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
 	CP_Graphics_DrawTriangleAdvanced(car1.position.x + 30.f, car1.position.y, car1.position.x - 15.f, car1.position.y - 25.f, car1.position.x - 15.f, car1.position.y + 25.f, car1.angle);
 	CP_Graphics_DrawTriangleAdvanced(car2.position.x + 30.f, car2.position.y, car2.position.x - 15.f, car2.position.y - 25.f, car2.position.x - 15.f, car2.position.y + 25.f, car2.angle);
 	CP_Graphics_DrawTriangleAdvanced(car3.position.x + 30.f, car3.position.y, car3.position.x - 15.f, car3.position.y - 25.f, car3.position.x - 15.f, car3.position.y + 25.f, car3.angle);
-
-	// Mouse pos
-	CP_Settings_TextSize(20.0f);
-	char buffer1[50] = { 0 };
-	sprintf_s(buffer1, _countof(buffer1), "Mouse x: %d", carselect);
-	CP_Font_DrawText(buffer1, 100, 100);
-	char buffer2[50] = { 0 };
-	sprintf_s(buffer2, _countof(buffer2), "Mouse y: %.2f", car1.rspeed);
-	CP_Font_DrawText(buffer2, 100, 120);
-
 }
 
 void Car_Level_Exit()
