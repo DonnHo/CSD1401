@@ -21,10 +21,7 @@ void Main_Menu_Update()
 	
 	//color
 	CP_Color black = CP_Color_Create(0,0,0,255);
-	CP_Color white = CP_Color_Create(255, 255, 255, 255);
 	CP_Color lblue = CP_Color_CreateHex(0x80dfff);
-	CP_Color green = CP_Color_CreateHex(0x00F55D);
-	CP_Color dred = CP_Color_Create(139, 0, 0, 255);
 	CP_Color red = CP_Color_Create(200, 0 , 0, 255);
 
 	//Text Alignment

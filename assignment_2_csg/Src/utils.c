@@ -27,6 +27,5 @@ CP_Vector AngleToVector(float radian_angle)
 {
    CP_Vector vec1;
    vec1 = CP_Vector_Set(cos(radian_angle), sin(radian_angle));
-   
    return vec1;
 }
