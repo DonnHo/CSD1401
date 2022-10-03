@@ -1,3 +1,17 @@
+//---------------------------------------------------------
+// file:	mainmenu.c
+// author:	Brandon Ho Jun Jie
+// email:	brandonjunjie.ho@digipen.edu
+//
+// brief:	Contains functions for main menu. Has start button to go to
+//			car level and exit button to close the program.
+//
+// documentation link:
+// https://github.com/DigiPen-Faculty/CProcessing/wiki
+//
+// Copyright © 2020 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #include "cprocessing.h"
 #include "carlevel.h"
 #include <stdio.h>

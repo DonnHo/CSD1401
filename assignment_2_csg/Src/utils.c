@@ -1,3 +1,19 @@
+//---------------------------------------------------------
+// file:	utils.c
+// author:	Brandon Ho Jun Jie
+// email:	brandonjunjie.ho@digipen.edu
+//
+// brief:	Contains functions for utils. Has function IsAreaclicked
+//			and IsCircleClicked to check for mouse click in an area.
+//			Function AngleToVector converts the angle of the car
+//			relative to x-axis to a vector.
+//
+// documentation link:
+// https://github.com/DigiPen-Faculty/CProcessing/wiki
+//
+// Copyright © 2020 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #include "cprocessing.h"
 #include <math.h>
 

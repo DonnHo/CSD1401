@@ -1,3 +1,18 @@
+//---------------------------------------------------------
+// file:	carlevel.c
+// author:	Brandon Ho Jun Jie
+// email:	brandonjunjie.ho@digipen.edu
+//
+// brief:	Contains functions for car level. Loads 3 cars
+//			that are selected by click on the car and moving
+//			using WASD.
+//
+// documentation link:
+// https://github.com/DigiPen-Faculty/CProcessing/wiki
+//
+// Copyright © 2020 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #include "cprocessing.h"
 #include "mainmenu.h"
 #include <stdio.h>
