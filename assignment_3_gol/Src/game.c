@@ -16,6 +16,9 @@ int gIsPaused;
 int gGrids[GOL_GRID_BUFFERS][GOL_GRID_ROWS][GOL_GRID_COLS];
 
 /* Feel free to declare your own variables here */
+#define GOL_GRID_REFERENCE 0
+#define GOL_GRID_DISPLAY 1
+
 float cellsize;
 float gridsize;
 CP_Vector grid_pos;
@@ -27,7 +30,7 @@ void game_init(void)
     for (int row = 0; row < GOL_GRID_ROWS; ++row) {
         for (int col = 0; col < GOL_GRID_COLS; ++col) {
             for (int i = 0; i < GOL_GRID_BUFFERS; ++i) {
-                gGrids[i][row][col] = GOL_DEAD;
+                gGrids[i][row][col] = GOL_DEAD; break;
             }
         }
     }
@@ -65,20 +68,33 @@ void game_update(void)
     CP_Settings_StrokeWeight(5.0f);
     CP_Graphics_DrawRect(grid_pos.x, grid_pos.y, gridsize, gridsize);
 
-    // Drawing grid
+    // Drawing individual grid
 
-    for (float yrow = grid_pos.y; yrow < gridsize + grid_pos.y; yrow += cellsize)
+    for (int yrow = 0; yrow < GOL_GRID_ROWS; ++yrow)
     {
-        for (float xcol = grid_pos.x; xcol < gridsize + grid_pos.x; xcol += cellsize)
+        for (int xcol = 0; xcol < GOL_GRID_COLS; ++xcol)
         {
-            CP_Settings_StrokeWeight(1.0f);
-            CP_Graphics_DrawRect(xcol, yrow, cellsize, cellsize);
+            if (gGrids[0][yrow][xcol] == GOL_ALIVE)
+            {
+                CP_Settings_StrokeWeight(1.0f);
+                CP_Settings_Fill(CP_Color_Create(70, 150, 70, 255));
+                CP_Graphics_DrawRect(grid_pos.x + cellsize * xcol, grid_pos.y + cellsize * yrow, cellsize, cellsize);
+            }
+            else
+            {
+                CP_Settings_StrokeWeight(1.0f);
+                CP_Settings_Fill(CP_Color_Create(150, 150, 150, 255));
+                CP_Graphics_DrawRect(grid_pos.x + cellsize * xcol, grid_pos.y + cellsize * yrow, cellsize, cellsize);
+            }
         }
     }
-
-    // 
     grid.x = (CP_Input_GetMouseX() - grid_pos.x) / cellsize;
     grid.y = (CP_Input_GetMouseY() - grid_pos.y) / cellsize;
+    
+    // 
+    
+    
+    
 
     // Debug text (within X = 1000 ~ 1450, Y = 50 ~ 950)
     CP_Settings_Fill(CP_Color_Create(164, 219, 232, 255));
@@ -89,8 +105,10 @@ void game_update(void)
     char buffer[50] = { 0 };
     sprintf_s(buffer, _countof(buffer), "Mouse X: %.2f Mouse Y: %.2f", CP_Input_GetMouseX(), CP_Input_GetMouseY());
     CP_Font_DrawText(buffer, 1025, 75);
-    sprintf_s(buffer, _countof(buffer), "Grid X: %.2f Grid Y: %.2f", grid.x, grid.y);
+    sprintf_s(buffer, _countof(buffer), "Grid X: %d Grid Y: %d", (int)grid.x, (int)grid.y);
     CP_Font_DrawText(buffer, 1025, 100);
+    sprintf_s(buffer, _countof(buffer), "Alive: %d", gGrids[0][(int)grid.y][(int)grid.x]);
+    CP_Font_DrawText(buffer, 1025, 125);
 
 }
 
