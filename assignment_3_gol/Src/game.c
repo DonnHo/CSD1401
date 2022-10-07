@@ -75,7 +75,7 @@ void game_update(void)
     if (gIsPaused == 1);
     else
     {
-        // checking reference grid status
+        // checking reference grid status and update display grid
         for (int yrow = 0; yrow < GOL_GRID_ROWS; ++yrow) // loop through grid y
         {
             for (int xcol = 0; xcol < GOL_GRID_COLS; ++xcol) // loop through grid x
@@ -131,32 +131,43 @@ void game_update(void)
     CP_Graphics_DrawRect(grid_pos.x, grid_pos.y, gridsize, gridsize);
 
     // Drawing individual grid
-
     for (int yrow = 0; yrow < GOL_GRID_ROWS; ++yrow)
     {
         for (int xcol = 0; xcol < GOL_GRID_COLS; ++xcol)
         {
             if (gGrids[display_grid][yrow][xcol] == GOL_ALIVE)
-            {
-                CP_Settings_StrokeWeight(1.0f);
+            {                
                 CP_Settings_Fill(CP_Color_Create(70, 150, 70, 255));
-                CP_Graphics_DrawRect(grid_pos.x + cellsize * xcol, grid_pos.y + cellsize * yrow, cellsize, cellsize);
             }
             else
             {
                 CP_Settings_StrokeWeight(1.0f);
                 CP_Settings_Fill(CP_Color_Create(150, 150, 150, 255));
-                CP_Graphics_DrawRect(grid_pos.x + cellsize * xcol, grid_pos.y + cellsize * yrow, cellsize, cellsize);
             }
+            CP_Settings_StrokeWeight(1.0f);
+            CP_Graphics_DrawRect(grid_pos.x + cellsize * xcol, grid_pos.y + cellsize * yrow, cellsize, cellsize);
         }
     }
 
-    grid.x = (CP_Input_GetMouseX() - grid_pos.x) / cellsize;
-    grid.y = (CP_Input_GetMouseY() - grid_pos.y) / cellsize; 
-    
+    grid.x = (CP_Input_GetMouseX() - grid_pos.x) / cellsize; // mouse pos x in grid
+    grid.y = (CP_Input_GetMouseY() - grid_pos.y) / cellsize; // mouse pos y in grid
+
+    if (gIsPaused)
+    {
+        if (CP_Input_MouseClicked())
+        {
+            if (grid.x < GOL_GRID_COLS && grid.x >= 0 && grid.y < GOL_GRID_ROWS && grid.y >= 0)
+            {
+                gGrids[display_grid][(int)grid.y][(int)grid.x] = !gGrids[display_grid][(int)grid.y][(int)grid.x];
+            }
+        }
+    }
+         
+
+    // debug logic check
     nbref = 0;
     nbdisplay = 0;
-    // debug logic check
+    
     for (int ycheck = (int)grid.y - 1, i = 0; i < 3; ++ycheck, ++i) // loop through current grid neighbour y
     {
         for (int xcheck = (int)grid.x - 1, j = 0; j < 3; ++xcheck, ++j) // loop through current grid neighbour x
@@ -165,10 +176,12 @@ void game_update(void)
             else if (gGrids[ref_grid][ycheck][xcheck] == GOL_ALIVE) // check if current cell is alive
             {
                 ++nbref;
-                if (gGrids[display_grid][ycheck][xcheck] == GOL_ALIVE) // check if current cell is alive
-                {
-                    ++nbdisplay;
-                }
+                
+            }
+            if (ycheck == (int)grid.y && xcheck == (int)grid.x);
+            else if (gGrids[display_grid][ycheck][xcheck] == GOL_ALIVE) // check if current cell is alive
+            {
+                ++nbdisplay;
             }
         }
     }
@@ -190,11 +203,11 @@ void game_update(void)
     sprintf_s(buffer, _countof(buffer), "Game paused : %d", gIsPaused);
     CP_Font_DrawText(buffer, 1025, 175);
 
-
-    if (CP_Input_KeyTriggered(KEY_ANY)) {
+    // any key to pause
+    if (CP_Input_KeyTriggered(KEY_ANY))
+    {
         gIsPaused = !gIsPaused;
-    }
-   
+    }   
     if (gIsPaused);
     else
     {
