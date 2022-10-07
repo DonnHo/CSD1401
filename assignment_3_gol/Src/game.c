@@ -72,10 +72,6 @@ void game_update(void)
 {
     CP_Graphics_ClearBackground(CP_Color_Create(60, 60, 60, 255));
     
-    //gIsPaused = TRUE;
-    if (CP_Input_KeyTriggered(KEY_ANY)) {
-        gIsPaused = !gIsPaused;
-    }
     if (gIsPaused == 1);
     else
     {
@@ -86,15 +82,18 @@ void game_update(void)
             {
                 nbalive = 0;
                 // checking current grid neighbour status
-                for (int ycheck = yrow , i = 0; i < 3; ++ycheck, ++i) // loop through current grid neighbour y
+                for (int ycheck = yrow - 1, i = 0; i < 3; ++ycheck, ++i) // loop through current grid neighbour y
                 {
-                    for (int xcheck = xcol , j = 0; j < 3; ++xcheck, ++j) // loop through current grid neighbour x
-                    {
-                        if (ycheck == yrow && xcheck == xcol); // check if current cell is itself
-                                            
-                        else if (gGrids[ref_grid][ycheck][xcheck] == GOL_ALIVE) // check if current cell is alive
+                    for (int xcheck = xcol - 1, j = 0; j < 3; ++xcheck, ++j) // loop through current grid neighbour x
+                    {   
+                        if (ycheck < 0 || ycheck > 29 || xcheck < 0 || xcheck > 29);
+                        else
                         {
-                            ++nbalive;
+                            if (ycheck == yrow && xcheck == xcol); // check if current cell is itself
+                            else if (gGrids[ref_grid][ycheck][xcheck] == GOL_ALIVE) // check if current cell is alive
+                            {
+                                ++nbalive;
+                            }
                         }
                     }
                 }
@@ -102,13 +101,13 @@ void game_update(void)
                 // logic check
                 if (gGrids[ref_grid][yrow][xcol] == GOL_ALIVE)
                 {
-                    if (nbalive < 2 || nbalive >  3)
+                    if (nbalive == 2 || nbalive ==  3)
                     {
-                        gGrids[display_grid][yrow][xcol] = GOL_DEAD;
+                        gGrids[display_grid][yrow][xcol] = GOL_ALIVE;
                     }
                     else
                     {
-                        gGrids[display_grid][yrow][xcol] = GOL_ALIVE;
+                        gGrids[display_grid][yrow][xcol] = GOL_DEAD;
                     }
                 }
                 else
@@ -137,7 +136,7 @@ void game_update(void)
     {
         for (int xcol = 0; xcol < GOL_GRID_COLS; ++xcol)
         {
-            if (gGrids[ref_grid][yrow][xcol] == GOL_ALIVE)
+            if (gGrids[display_grid][yrow][xcol] == GOL_ALIVE)
             {
                 CP_Settings_StrokeWeight(1.0f);
                 CP_Settings_Fill(CP_Color_Create(70, 150, 70, 255));
@@ -162,25 +161,14 @@ void game_update(void)
     {
         for (int xcheck = (int)grid.x - 1, j = 0; j < 3; ++xcheck, ++j) // loop through current grid neighbour x
         {
-            /*ycheck += ycheck < 0 ? 1 : 0;
-            ycheck -= ycheck > 29 ? 1 : 0;
-            xcheck += xcheck < 0 ? 1 : 0;
-            xcheck -= xcheck > 29 ? 1 : 0;*/
-            if (ycheck == (int)grid.y && xcheck == (int)grid.x) // check if current cell is itself
-            {
-                continue;
-            }
+            if (ycheck == (int)grid.y && xcheck == (int)grid.x); // check if current cell is itself
             else if (gGrids[ref_grid][ycheck][xcheck] == GOL_ALIVE) // check if current cell is alive
             {
                 ++nbref;
-            }
-            else if (gGrids[display_grid][ycheck][xcheck] == GOL_ALIVE) // check if current cell is alive
-            {
-                ++nbdisplay;
-            }
-            else
-            {
-                continue;
+                if (gGrids[display_grid][ycheck][xcheck] == GOL_ALIVE) // check if current cell is alive
+                {
+                    ++nbdisplay;
+                }
             }
         }
     }
@@ -202,7 +190,10 @@ void game_update(void)
     sprintf_s(buffer, _countof(buffer), "Game paused : %d", gIsPaused);
     CP_Font_DrawText(buffer, 1025, 175);
 
-   
+
+    if (CP_Input_KeyTriggered(KEY_ANY)) {
+        gIsPaused = !gIsPaused;
+    }
    
     if (gIsPaused);
     else
@@ -210,9 +201,6 @@ void game_update(void)
         ref_grid = !ref_grid;
         display_grid = !display_grid;
     }
-    /*if (CP_Input_KeyTriggered(KEY_ANY)) {
-        gIsPaused = !gIsPaused;
-    }*/
     
 }
 
