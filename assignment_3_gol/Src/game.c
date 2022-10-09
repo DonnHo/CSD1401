@@ -1,3 +1,22 @@
+//---------------------------------------------------------
+// file:	game.c
+// author:	Brandon Ho Jun Jie
+// email:	brandonjunjie.ho@digipen.edu
+//
+// brief:	Contains functions for game of life. Simulates
+// game of life automaton game. Press any key to pause
+// and click any cell in pause state to change its state.
+// Extra features include changing game speed to slow,
+// normal and fast, and reset or clear grid buttons.
+// Debugging and game values on the right side for user to
+// view.
+//
+// documentation link:
+// https://github.com/DigiPen-Faculty/CProcessing/wiki
+//
+// Copyright © 2020 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "cprocessing.h"
@@ -17,6 +36,7 @@ int gGrids[GOL_GRID_BUFFERS][GOL_GRID_ROWS][GOL_GRID_COLS];
 
 /* Feel free to declare your own variables here */
 
+//Game variables
 float cellsize;
 float gridsize;
 CP_Vector grid_pos;
@@ -25,8 +45,8 @@ int nbalive;
 int ref_grid;
 int display_grid;
 
+//Debug variables
 int nbref, nbdisplay;
-int test;
 
 void game_init(void)
 {
@@ -65,9 +85,6 @@ void game_init(void)
     nbalive = 0;
     ref_grid = 0;
     display_grid = 1;
-
-    test = 0;
-
 }
 
 void game_update(void)
@@ -154,9 +171,9 @@ void game_update(void)
     grid.x = (CP_Input_GetMouseX() - grid_pos.x) / cellsize; // mouse pos x in grid
     grid.y = (CP_Input_GetMouseY() - grid_pos.y) / cellsize; // mouse pos y in grid
 
-    if (gIsPaused)
+    if (gIsPaused) 
     {
-        if (CP_Input_MouseClicked())
+        if (CP_Input_MouseClicked()) // Click to change cell state
         {
             if (grid.x < GOL_GRID_COLS && grid.x >= 0 && grid.y < GOL_GRID_ROWS && grid.y >= 0)
             {
@@ -166,10 +183,9 @@ void game_update(void)
     }
          
 
-    // debug logic check
+    // Debug logic check
     nbref = 0;
-    nbdisplay = 0;
-    
+    nbdisplay = 0;    
     for (int ycheck = (int)grid.y - 1, i = 0; i < 3; ++ycheck, ++i) // loop through current grid neighbour y
     {
         for (int xcheck = (int)grid.x - 1, j = 0; j < 3; ++xcheck, ++j) // loop through current grid neighbour x
@@ -217,6 +233,7 @@ void game_update(void)
     CP_Graphics_DrawRect(1050, 650, 100, 50); // Normal
     CP_Settings_Fill(CP_Color_Create(100, 220, 100, 255));
     CP_Graphics_DrawRect(1050, 725, 100, 50); // Fast
+
     // Extra buttons text
     CP_Settings_Fill(CP_Color_Create(0, 0, 0, 255));
     CP_Font_DrawText("Reset", 1075, 825);
@@ -224,6 +241,7 @@ void game_update(void)
     CP_Font_DrawText("Slow", 1075, 600);
     CP_Font_DrawText("Normal", 1065, 675);
     CP_Font_DrawText("Fast", 1075, 750);
+
     //Extra buttons collision box
     if (CP_Input_MouseClicked())
     {
@@ -266,15 +284,13 @@ void game_update(void)
         }
     }
     
-    // any key to pause
-
-    //gIsPaused = TRUE;
+    // pause game
     if (CP_Input_KeyTriggered(KEY_ANY))
     {
         gIsPaused = !gIsPaused;
     }   
     if (gIsPaused);
-    else
+    else // swapping reference and display grid
     {
         ref_grid = !ref_grid;
         display_grid = !display_grid;
