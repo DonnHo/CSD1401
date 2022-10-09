@@ -57,6 +57,7 @@ void game_init(void)
 
     /* Initialization of your other variables here */
     CP_System_SetWindowSize(1500, 1000);
+    CP_System_SetFrameRate(30.0f);
     cellsize = 30.f;
     gridsize = 900.f;
     grid_pos.x = 50.f;
@@ -66,6 +67,7 @@ void game_init(void)
     display_grid = 1;
 
     test = 0;
+
 }
 
 void game_update(void)
@@ -204,17 +206,25 @@ void game_update(void)
     sprintf_s(buffer, _countof(buffer), "Game paused : %d", gIsPaused);
     CP_Font_DrawText(buffer, 1025, 175);
 
-    
+    // Extra buttons feature
     CP_Settings_Fill(CP_Color_Create(200, 70, 220, 255));
-    CP_Graphics_DrawRect(1050, 800, 100, 50);
-
-    CP_Settings_Fill(CP_Color_Create(20, 220, 170, 255));
-    CP_Graphics_DrawRect(1200, 800, 100, 50);
-
+    CP_Graphics_DrawRect(1050, 800, 100, 50); // Reset
+    CP_Settings_Fill(CP_Color_Create(20, 220, 170, 255)); 
+    CP_Graphics_DrawRect(1050, 875, 100, 50); // Clear
+    CP_Settings_Fill(CP_Color_Create(100, 100, 220, 255));
+    CP_Graphics_DrawRect(1050, 575, 100, 50); // Slow
+    CP_Settings_Fill(CP_Color_Create(220, 100, 100, 255));
+    CP_Graphics_DrawRect(1050, 650, 100, 50); // Normal
+    CP_Settings_Fill(CP_Color_Create(100, 220, 100, 255));
+    CP_Graphics_DrawRect(1050, 725, 100, 50); // Fast
+    // Extra buttons text
     CP_Settings_Fill(CP_Color_Create(0, 0, 0, 255));
     CP_Font_DrawText("Reset", 1075, 825);
-    CP_Font_DrawText("Clear", 1225, 825);
-
+    CP_Font_DrawText("Clear", 1075, 900);
+    CP_Font_DrawText("Slow", 1075, 600);
+    CP_Font_DrawText("Normal", 1065, 675);
+    CP_Font_DrawText("Fast", 1075, 750);
+    //Extra buttons collision box
     if (CP_Input_MouseClicked())
     {
         if (CP_Input_GetMouseX() > 1050 && CP_Input_GetMouseX() < 1150 && CP_Input_GetMouseY() > 800 && CP_Input_GetMouseY() < 850)
@@ -232,7 +242,7 @@ void game_update(void)
             gGrids[display_grid][3][2] = GOL_ALIVE;
             gGrids[display_grid][3][3] = GOL_ALIVE;
         }
-        else if (CP_Input_GetMouseX() > 1200 && CP_Input_GetMouseX() < 1300 && CP_Input_GetMouseY() > 800 && CP_Input_GetMouseY() < 850)
+        else if (CP_Input_GetMouseX() > 1050 && CP_Input_GetMouseX() < 1150 && CP_Input_GetMouseY() > 875 && CP_Input_GetMouseY() < 925)
         {
             for (int row = 0; row < GOL_GRID_ROWS; ++row) {
                 for (int col = 0; col < GOL_GRID_COLS; ++col) {
@@ -241,6 +251,18 @@ void game_update(void)
                     }
                 }
             }
+        }
+        else if (CP_Input_GetMouseX() > 1050 && CP_Input_GetMouseX() < 1150 && CP_Input_GetMouseY() > 575 && CP_Input_GetMouseY() < 625)
+        {
+            CP_System_SetFrameRate(15.0f);
+        }
+        else if (CP_Input_GetMouseX() > 1050 && CP_Input_GetMouseX() < 1150 && CP_Input_GetMouseY() > 650 && CP_Input_GetMouseY() < 700)
+        {
+            CP_System_SetFrameRate(30.0f);
+        }
+        else if (CP_Input_GetMouseX() > 1050 && CP_Input_GetMouseX() < 1150 && CP_Input_GetMouseY() > 725 && CP_Input_GetMouseY() < 775)
+        {
+            CP_System_SetFrameRate(45.0f);
         }
     }
     
