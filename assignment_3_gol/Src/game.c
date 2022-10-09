@@ -86,7 +86,7 @@ void game_update(void)
                 {
                     for (int xcheck = xcol - 1, j = 0; j < 3; ++xcheck, ++j) // loop through current grid neighbour x
                     {   
-                        if (ycheck < 0 || ycheck > 29 || xcheck < 0 || xcheck > 29);
+                        if (ycheck < 0 || ycheck >= GOL_GRID_ROWS || xcheck < 0 || xcheck >= GOL_GRID_COLS); // skip check if out of grid range
                         else
                         {
                             if (ycheck == yrow && xcheck == xcol); // check if current cell is itself
@@ -185,6 +185,7 @@ void game_update(void)
             }
         }
     }
+
     // Debug text (within X = 1000 ~ 1450, Y = 50 ~ 950)
     CP_Settings_Fill(CP_Color_Create(164, 219, 232, 255));
     CP_Settings_StrokeWeight(3.0f);
@@ -203,7 +204,49 @@ void game_update(void)
     sprintf_s(buffer, _countof(buffer), "Game paused : %d", gIsPaused);
     CP_Font_DrawText(buffer, 1025, 175);
 
+    
+    CP_Settings_Fill(CP_Color_Create(200, 70, 220, 255));
+    CP_Graphics_DrawRect(1050, 800, 100, 50);
+
+    CP_Settings_Fill(CP_Color_Create(20, 220, 170, 255));
+    CP_Graphics_DrawRect(1200, 800, 100, 50);
+
+    CP_Settings_Fill(CP_Color_Create(0, 0, 0, 255));
+    CP_Font_DrawText("Reset", 1075, 825);
+    CP_Font_DrawText("Clear", 1225, 825);
+
+    if (CP_Input_MouseClicked())
+    {
+        if (CP_Input_GetMouseX() > 1050 && CP_Input_GetMouseX() < 1150 && CP_Input_GetMouseY() > 800 && CP_Input_GetMouseY() < 850)
+        {
+            for (int row = 0; row < GOL_GRID_ROWS; ++row) {
+                for (int col = 0; col < GOL_GRID_COLS; ++col) {
+                    for (int i = 0; i < GOL_GRID_BUFFERS; ++i) {
+                        gGrids[i][row][col] = GOL_DEAD;
+                    }
+                }
+            }
+            gGrids[display_grid][1][2] = GOL_ALIVE;
+            gGrids[display_grid][2][3] = GOL_ALIVE;
+            gGrids[display_grid][3][1] = GOL_ALIVE;
+            gGrids[display_grid][3][2] = GOL_ALIVE;
+            gGrids[display_grid][3][3] = GOL_ALIVE;
+        }
+        else if (CP_Input_GetMouseX() > 1200 && CP_Input_GetMouseX() < 1300 && CP_Input_GetMouseY() > 800 && CP_Input_GetMouseY() < 850)
+        {
+            for (int row = 0; row < GOL_GRID_ROWS; ++row) {
+                for (int col = 0; col < GOL_GRID_COLS; ++col) {
+                    for (int i = 0; i < GOL_GRID_BUFFERS; ++i) {
+                        gGrids[i][row][col] = GOL_DEAD;
+                    }
+                }
+            }
+        }
+    }
+    
     // any key to pause
+
+    //gIsPaused = TRUE;
     if (CP_Input_KeyTriggered(KEY_ANY))
     {
         gIsPaused = !gIsPaused;
